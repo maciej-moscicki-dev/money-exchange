@@ -7,8 +7,6 @@ import com.finance.moneyexchange.domain.customer.model.Customer;
 import com.finance.moneyexchange.dto.currencyexchange.CurrencyExchangeResponse;
 import com.finance.moneyexchange.dto.customer.CustomerDto;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -18,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.NoSuchElementException;
 import java.util.UUID;
@@ -35,11 +34,6 @@ public class CurrencyExchangeController {
     @Operation(
             summary = "Get today's USD exchange rate",
             description = "This endpoint retrieves the current exchange rate of USD for today."
-    )
-    @ApiResponse(
-            responseCode = "404",
-            description = "Today USD exchange rate was not found. Please verify if it was already published.",
-            content = @Content(mediaType = "application/json")
     )
     public ResponseEntity<CurrencyExchangeResponse> getTodayUsdExchangeRate() {
         return new ResponseEntity<>(
@@ -79,6 +73,12 @@ public class CurrencyExchangeController {
     public ResponseEntity<String> handleNoSuchElementException(NoSuchElementException ex) {
         log.error(ex.getMessage());
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(ResponseStatusException.class)
+    public ResponseEntity<String> handleResponseStatusException(ResponseStatusException ex) {
+        log.error(ex.getMessage());
+        return new ResponseEntity<>(ex.getMessage(), ex.getStatusCode());
     }
 
     private CustomerDto mapCustomerToCustomerDto(Customer customer) {

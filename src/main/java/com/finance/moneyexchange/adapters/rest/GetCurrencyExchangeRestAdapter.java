@@ -11,11 +11,11 @@ import org.springframework.web.server.ResponseStatusException;
 
 @Component
 @Slf4j
-public class GetGetCurrencyExchangeRestAdapter implements GetCurrencyExchangeRatePort {
+public class GetCurrencyExchangeRestAdapter implements GetCurrencyExchangeRatePort {
     private final String nbpApiUrlProperty;
     private final RestTemplate restTemplate;
 
-    public GetGetCurrencyExchangeRestAdapter(@Value("${nbp.api.url}") String nbpApiUrlProperty, RestTemplate restTemplate) {
+    public GetCurrencyExchangeRestAdapter(@Value("${nbp.api.url}") String nbpApiUrlProperty, RestTemplate restTemplate) {
         this.nbpApiUrlProperty = nbpApiUrlProperty;
         this.restTemplate = restTemplate;
     }
@@ -24,7 +24,6 @@ public class GetGetCurrencyExchangeRestAdapter implements GetCurrencyExchangeRat
         try {
             return restTemplate.getForObject(nbpApiUrlProperty, CurrencyExchangeResponse.class);
         } catch (HttpClientErrorException e) {
-            log.error("Today USD exchange rate was not able to be fetched. Reason: ", e);
             throw new ResponseStatusException(e.getStatusCode(), e.getMessage());
         }
     }
