@@ -1,4 +1,13 @@
-Money Exchange.
+Money Exchange Application.
+
+This application allows to:
+- Create new user with account balance in PLN.
+- Fetch information about user using UUID.
+- Fetch information about todays USD/PLN and PLN/USD exchange rate. 
+  Note: If exchange rate for today is not available, you will receive proper communicate to wait until exchange rate is available.
+        For testing purpose feel free to change url in application.properties for historic data.
+- Exchange customer money from PLN to USD.
+- Exchange customer money from USD to PLN.
 
 ## Getting Started
 1. Clone the repo
